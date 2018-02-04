@@ -1,8 +1,6 @@
-# Bioinformatics one-liners
+# Useful one-liners
 
-[![DOI](https://zenodo.org/badge/3882/stephenturner/oneliners.svg)](https://zenodo.org/badge/latestdoi/3882/stephenturner/oneliners)
-
-Useful bash one-liners useful for bioinformatics (and [some, more generally useful](#etc)).  
+Useful bash one-liners (and [some, more generally useful](#etc)).  
 
 
 ## Contents
@@ -12,7 +10,6 @@ Useful bash one-liners useful for bioinformatics (and [some, more generally usef
 - [awk & sed for bioinformatics](#awk--sed-for-bioinformatics)
 - [sort, uniq, cut, etc.](#sort-uniq-cut-etc)
 - [find, xargs, and GNU parallel](#find-xargs-and-gnu-parallel)
-- [seqtk](#seqtk)
 - [GFF3 Annotations](#gff3-annotations)
 - [Other generally useful aliases for your .bashrc](#other-generally-useful-aliases-for-your-bashrc)
 - [Etc.](#etc)
@@ -23,7 +20,6 @@ Useful bash one-liners useful for bioinformatics (and [some, more generally usef
 
 * <http://gettinggeneticsdone.blogspot.com/2013/10/useful-linux-oneliners-for-bioinformatics.html#comments>
 * <http://sed.sourceforge.net/sed1line.txt>
-* <https://github.com/lh3/seqtk>
 * <http://lh3lh3.users.sourceforge.net/biounix.shtml>
 * <http://genomespot.blogspot.com/2013/08/a-selection-of-useful-bash-one-liners.html>
 * <http://biowize.wordpress.com/2012/06/15/command-line-magic-for-your-gene-annotations/>
@@ -277,81 +273,6 @@ Index your bam files in parallel, but only echo the commands (`--dry-run`) rathe
 
     find *.bam | parallel --dry-run 'samtools index {}'
 
-
-
-
-## seqtk
-
-[[back to top](#contents)]
-
-*Download seqtk at <https://github.com/lh3/seqtk>. Seqtk is a fast and lightweight tool for processing sequences in the FASTA or FASTQ format. It seamlessly parses both FASTA and FASTQ files which can also be optionally compressed by gzip.*
-
-
-Convert FASTQ to FASTA:
-
-    seqtk seq -a in.fq.gz > out.fa
-
-
-Convert ILLUMINA 1.3+ FASTQ to FASTA and mask bases with quality lower than 20 to lowercases (the 1st command line) or to `N` (the 2nd):
-
-    seqtk seq -aQ64 -q20 in.fq > out.fa
-    seqtk seq -aQ64 -q20 -n N in.fq > out.fa
-
-
-Fold long FASTA/Q lines and remove FASTA/Q comments:
-
-    seqtk seq -Cl60 in.fa > out.fa
-
-
-Convert multi-line FASTQ to 4-line FASTQ:
-
-    seqtk seq -l0 in.fq > out.fq
-
-
-Reverse complement FASTA/Q:
-
-    seqtk seq -r in.fq > out.fq
-
-
-Extract sequences with names in file `name.lst`, one sequence name per line:
-
-    seqtk subseq in.fq name.lst > out.fq
-
-
-Extract sequences in regions contained in file `reg.bed`:
-
-    seqtk subseq in.fa reg.bed > out.fa
-
-
-Mask regions in `reg.bed` to lowercases:
-
-    seqtk seq -M reg.bed in.fa > out.fa
-
-
-Subsample 10000 read pairs from two large paired FASTQ files (remember to use the same random seed to keep pairing):
-
-    seqtk sample -s100 read1.fq 10000 > sub1.fq
-    seqtk sample -s100 read2.fq 10000 > sub2.fq
-
-
-Trim low-quality bases from both ends using the Phred algorithm:
-
-    seqtk trimfq in.fq > out.fq
-
-
-Trim 5bp from the left end of each read and 10bp from the right end:
-
-    seqtk trimfq -b 5 -e 10 in.fa > out.fa
-
-
-Untangle an interleaved paired-end FASTQ file. If a FASTQ file has paired-end reads intermingled, and you want to separate them into separate /1 and /2 files, and assuming the /1 reads precede the /2 reads:
-
-    seqtk seq -l0 -1 interleaved.fq > deinterleaved_1.fq
-    seqtk seq -l0 -2 interleaved.fq > deinterleaved_2.fq
-
-
-
-
 ## GFF3 Annotations
 
 [[back to top](#contents)]
@@ -501,7 +422,6 @@ Common typos:
     alias mf="mv -i"
     alias mroe="more"
     alias c='clear'
-    alias emacs='vim'
 
 Show your `$PATH` in a prettier format:
 
