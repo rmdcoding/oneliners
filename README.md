@@ -10,7 +10,6 @@ Useful bash one-liners (and [some, more generally useful](#etc)).
 - [awk & sed for bioinformatics](#awk--sed-for-bioinformatics)
 - [sort, uniq, cut, etc.](#sort-uniq-cut-etc)
 - [find, xargs, and GNU parallel](#find-xargs-and-gnu-parallel)
-- [GFF3 Annotations](#gff3-annotations)
 - [Other generally useful aliases for your .bashrc](#other-generally-useful-aliases-for-your-bashrc)
 - [Etc.](#etc)
 
@@ -272,41 +271,6 @@ Run FASTQC in parallel 12 jobs at a time:
 Index your bam files in parallel, but only echo the commands (`--dry-run`) rather than actually running them:
 
     find *.bam | parallel --dry-run 'samtools index {}'
-
-## GFF3 Annotations
-
-[[back to top](#contents)]
-
-
-Print all sequences annotated in a GFF3 file.
-
-    cut -s -f 1,9 yourannots.gff3 | grep $'\t' | cut -f 1 | sort | uniq
-
-
-Determine all feature types annotated in a GFF3 file.
-
-    grep -v '^#' yourannots.gff3 | cut -s -f 3 | sort | uniq
-
-
-Determine the number of genes annotated in a GFF3 file.
-
-    grep -c $'\tgene\t' yourannots.gff3
-
-
-Extract all gene IDs from a GFF3 file.
-
-    grep $'\tgene\t' yourannots.gff3 | perl -ne '/ID=([^;]+)/ and printf("%s\n", $1)'
-
-
-Print length of each gene in a GFF3 file.
-
-    grep $'\tgene\t' yourannots.gff3 | cut -s -f 4,5 | perl -ne '@v = split(/\t/); printf("%d\n", $v[1] - $v[0] + 1)'
-
-
-FASTA header lines to GFF format (assuming the length is in the header as an appended "\_length" as in [Velvet](http://www.ebi.ac.uk/~zerbino/velvet/) assembled transcripts):
-
-    grep '>' file.fasta | awk -F "_" 'BEGIN{i=1; print "##gff-version 3"}{ print $0"\t BLAT\tEXON\t1\t"$10"\t95\t+\t.\tgene_id="$0";transcript_id=Transcript_"i;i++ }' > file.gff
-
 
 
 
